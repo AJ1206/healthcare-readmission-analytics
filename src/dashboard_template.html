@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diabetes Readmission Dashboard</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
+  --series-1: #2a78d6; --series-2: #eb6834; --insufficient: #e1e0d9; --chip: #eef4fc;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+    --series-1: #3987e5; --series-2: #d95926; --insufficient: #2c2c2a; --chip: #1c2a3d;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+  --series-1: #3987e5; --series-2: #d95926; --insufficient: #2c2c2a; --chip: #1c2a3d;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 14px; line-height: 1.45; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 24px 16px 48px; }
+header h1 { font-size: 22px; margin: 0 0 4px; }
+header p { margin: 0; color: var(--ink-2); max-width: 900px; }
+.notice { margin-top: 10px; font-size: 12.5px; color: var(--ink-2); background: var(--chip);
+  border-radius: 8px; padding: 8px 12px; display: inline-block; }
+.filters { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0 16px; align-items: flex-end; }
+.filters label { display: flex; flex-direction: column; font-size: 12px; color: var(--ink-2); gap: 4px; }
+.filters select, .filters button { font: inherit; padding: 6px 10px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface); color: var(--ink); min-width: 150px; }
+.filters button { min-width: auto; cursor: pointer; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.kpi .label { font-size: 12px; color: var(--ink-2); }
+.kpi .value { font-size: 28px; font-weight: 600; margin-top: 2px; }
+.kpi .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr)); gap: 16px;
+  margin-top: 16px; align-items: start; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-width: 0; }
+.card h2 { font-size: 15px; margin: 0; }
+.card .desc { font-size: 12.5px; color: var(--ink-2); margin: 2px 0 8px; }
+.card svg { width: 100%; height: auto; display: block; overflow: visible; }
+.card svg text { fill: var(--ink-2); font-size: 11.5px; font-family: inherit; }
+.card svg .val { fill: var(--ink-2); }
+.card svg .muted { fill: var(--muted); }
+details { margin-top: 6px; font-size: 12.5px; color: var(--ink-2); }
+details table { border-collapse: collapse; width: 100%; margin-top: 6px; font-variant-numeric: tabular-nums; }
+details th, details td { text-align: right; padding: 3px 6px; border-bottom: 1px solid var(--grid); }
+details th:first-child, details td:first-child { text-align: left; }
+#tip { position: fixed; pointer-events: none; background: var(--surface); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12); display: none; z-index: 10; max-width: 280px; }
+section.method { margin-top: 20px; font-size: 12.5px; color: var(--ink-2); }
+section.method h2 { font-size: 15px; color: var(--ink); }
+.theme-toggle { float: right; }
+@media (max-width: 600px) { .kpi .value { font-size: 22px; } .filters select { min-width: 130px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle colour theme">Theme</button>
+  <h1>Diabetes inpatient readmission dashboard</h1>
+  <p>30-day readmission and resource use for __N_PATIENTS__ patients (first eligible encounter per patient) from the
+     UCI <em>Diabetes 130-US Hospitals 1999–2008</em> dataset. Use the filters to explore subgroups; every rate shows
+     a 95% Wilson confidence interval.</p>
+  <div class="notice">Educational analysis of historical, de-identified data. Rates for groups with fewer than
+    __MIN_N__ patients are suppressed. Associations shown here are not causal.</div>
+</header>
+
+<div class="filters" role="group" aria-label="Filters">
+  <label>Age group<select id="f_age"></select></label>
+  <label>Gender<select id="f_gender"></select></label>
+  <label>Recorded race<select id="f_race"></select></label>
+  <label>Primary diagnosis<select id="f_diag"></select></label>
+  <label>Admission type<select id="f_adm"></select></label>
+  <button id="reset" type="button">Reset filters</button>
+</div>
+
+<div class="kpis" id="kpis"></div>
+
+<div class="grid">
+  <div class="card"><h2>30-day readmission by discharge destination</h2>
+    <p class="desc">Patients transferred to another care facility are readmitted most often.</p>
+    <div id="c_discharge"></div></div>
+  <div class="card"><h2>30-day readmission by primary diagnosis</h2>
+    <p class="desc">ICD-9 diagnosis groups of the index admission.</p>
+    <div id="c_diag"></div></div>
+  <div class="card"><h2>30-day readmission by prior-year inpatient admissions</h2>
+    <p class="desc">The strongest single predictor in the data.</p>
+    <div id="c_prior"></div></div>
+  <div class="card"><h2>30-day readmission by age band</h2>
+    <p class="desc">Ten-year bands as recorded in the source data.</p>
+    <div id="c_age"></div></div>
+  <div class="card"><h2>Length-of-stay distribution</h2>
+    <p class="desc">Patients by days in hospital (resource utilisation).</p>
+    <div id="c_los"></div></div>
+  <div class="card"><h2>30-day readmission by HbA1c result</h2>
+    <p class="desc">Most patients had no HbA1c test during the admission.</p>
+    <div id="c_a1c"></div></div>
+  <div class="card"><h2>Model risk deciles (held-out test set, unfiltered)</h2>
+    <p class="desc">__MODEL_NAME__ · ROC-AUC __AUC__ · the top two deciles capture __CAPTURE__ of readmissions.
+      Not affected by filters.</p>
+    <div id="c_model"></div></div>
+</div>
+
+<section class="method">
+  <h2>Method notes</h2>
+  <p>Cohort: index (first) encounter per patient; encounters ending in death or hospice discharge excluded, because
+     readmission is not an applicable outcome. Outcome: readmission within 30 days of discharge, as coded in the source.
+     Confidence intervals: Wilson score method. Dashed line in each chart: rate for the current filter selection.
+     Source: Clore, Cios, DeShazo &amp; Strack (2014), UCI Machine Learning Repository, CC BY 4.0,
+     https://doi.org/10.24432/C5230J. Generated __GENERATED__.</p>
+</section>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const D = __DATA__;
+const MIN_N = __MIN_N__;
+const N = D.y.length;
+const fmtPct = v => (v * 100).toFixed(1) + "%";
+const fmtInt = v => v.toLocaleString("en-US");
+
+function wilson(k, n, z = 1.96) {
+  if (!n) return [NaN, NaN];
+  const p = k / n, d = 1 + z * z / n;
+  const c = (p + z * z / (2 * n)) / d, h = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d;
+  return [Math.max(0, c - h), Math.min(1, c + h)];
+}
+
+const FILTERS = [["f_age", "age_group"], ["f_gender", "gender"], ["f_race", "race"], ["f_diag", "diag"],
+                 ["f_adm", "adm_type"]];
+for (const [id, key] of FILTERS) {
+  const sel = document.getElementById(id);
+  sel.add(new Option("All", "-1"));
+  D.levels[key].forEach((lab, i) => sel.add(new Option(lab, String(i))));
+  sel.addEventListener("change", render);
+}
+document.getElementById("reset").addEventListener("click", () => {
+  for (const [id] of FILTERS) document.getElementById(id).value = "-1";
+  render();
+});
+document.getElementById("themeBtn").addEventListener("click", () => {
+  const r = document.documentElement;
+  const dark = r.dataset.theme ? r.dataset.theme === "dark"
+    : window.matchMedia("(prefers-color-scheme: dark)").matches;
+  r.dataset.theme = dark ? "light" : "dark";
+  render();
+});
+
+function selectedIdx() {
+  const active = FILTERS.map(([id, key]) => [key, +document.getElementById(id).value]).filter(([, v]) => v >= 0);
+  const idx = [];
+  for (let i = 0; i < N; i++) {
+    let ok = true;
+    for (const [key, v] of active) if (D[key][i] !== v) { ok = false; break; }
+    if (ok) idx.push(i);
+  }
+  return idx;
+}
+
+function groupRates(idx, key, labels) {
+  const n = new Array(labels.length).fill(0), k = new Array(labels.length).fill(0);
+  for (const i of idx) { const g = D[key][i]; n[g]++; k[g] += D.y[i]; }
+  return labels.map((lab, g) => ({ label: lab, n: n[g], k: k[g] }));
+}
+
+const tip = document.getElementById("tip");
+function showTip(ev, html) {
+  tip.innerHTML = html; tip.style.display = "block";
+  const x = Math.min(ev.clientX + 14, window.innerWidth - 290);
+  tip.style.left = x + "px"; tip.style.top = (ev.clientY + 14) + "px";
+}
+function hideTip() { tip.style.display = "none"; }
+const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+function hbar(el, rows, overall, opts = {}) {
+  const W = 560, rowH = 26, left = opts.left || 190, right = 120, top = 8;
+  const H = top + rows.length * rowH + 30;
+  const valid = rows.filter(r => r.n >= MIN_N);
+  const maxV = Math.max(0.05, ...valid.map(r => wilson(r.k, r.n)[1])) * 1.08;
+  const x = v => left + (W - left - right) * v / maxV;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${opts.aria || "bar chart"}">`;
+  const step = maxV > 0.3 ? 0.1 : maxV > 0.12 ? 0.05 : 0.02;
+  for (let t = 0; t <= maxV + 1e-9; t += step) {
+    s += `<line x1="${x(t)}" x2="${x(t)}" y1="${top}" y2="${H - 26}" stroke="${css("--grid")}" stroke-width="1"/>`;
+    s += `<text x="${x(t)}" y="${H - 10}" text-anchor="middle" class="muted">${Math.round(t * 100)}%</text>`;
+  }
+  rows.forEach((r, i) => {
+    const y = top + i * rowH, cy = y + rowH / 2;
+    s += `<text x="${left - 8}" y="${cy + 4}" text-anchor="end">${r.label}</text>`;
+    if (r.n < MIN_N) {
+      s += `<rect x="${left}" y="${y + 6}" width="${(W - left - right) * 0.25}" height="${rowH - 12}" rx="4" fill="${css("--insufficient")}"/>`;
+      s += `<text x="${left + 6}" y="${cy + 4}" class="muted">n = ${r.n}: too few to report</text>`;
+      return;
+    }
+    const p = r.k / r.n, [lo, hi] = wilson(r.k, r.n);
+    s += `<g class="hit" data-i="${i}"><rect x="${left}" y="${y}" width="${W - left}" height="${rowH}" fill="transparent"/>`;
+    s += `<rect x="${left}" y="${y + 6}" width="${Math.max(1, x(p) - left)}" height="${rowH - 12}" rx="4" fill="${css("--series-1")}"/>`;
+    s += `<line x1="${x(lo)}" x2="${x(hi)}" y1="${cy}" y2="${cy}" stroke="${css("--ink-2")}" stroke-width="1.2"/>`;
+    s += `<line x1="${x(lo)}" x2="${x(lo)}" y1="${cy - 4}" y2="${cy + 4}" stroke="${css("--ink-2")}"/>`;
+    s += `<line x1="${x(hi)}" x2="${x(hi)}" y1="${cy - 4}" y2="${cy + 4}" stroke="${css("--ink-2")}"/>`;
+    s += `<text x="${x(hi) + 6}" y="${cy + 4}" class="val">${fmtPct(p)} · n=${fmtInt(r.n)}</text></g>`;
+  });
+  if (overall != null && isFinite(overall)) {
+    s += `<line x1="${x(overall)}" x2="${x(overall)}" y1="${top}" y2="${H - 26}" stroke="${css("--ink-2")}" stroke-dasharray="2 3"/>`;
+  }
+  s += `</svg>`;
+  s += tableHtml(rows);
+  el.innerHTML = s;
+  el.querySelectorAll(".hit").forEach(g => {
+    const r = rows[+g.dataset.i], [lo, hi] = wilson(r.k, r.n);
+    g.addEventListener("mousemove", ev => showTip(ev,
+      `<strong>${r.label}</strong><br>30-day rate ${fmtPct(r.k / r.n)} (95% CI ${fmtPct(lo)}–${fmtPct(hi)})<br>` +
+      `${fmtInt(r.k)} readmissions / ${fmtInt(r.n)} patients`));
+    g.addEventListener("mouseleave", hideTip);
+  });
+}
+
+function tableHtml(rows) {
+  let t = `<details><summary>Show data table</summary><table><thead><tr><th>Group</th><th>Patients</th>` +
+          `<th>Readmitted &lt;30d</th><th>Rate</th><th>95% CI</th></tr></thead><tbody>`;
+  for (const r of rows) {
+    if (r.n < MIN_N) { t += `<tr><td>${r.label}</td><td>${r.n}</td><td colspan="3">suppressed (n &lt; ${MIN_N})</td></tr>`; continue; }
+    const [lo, hi] = wilson(r.k, r.n);
+    t += `<tr><td>${r.label}</td><td>${fmtInt(r.n)}</td><td>${fmtInt(r.k)}</td><td>${fmtPct(r.k / r.n)}</td>` +
+         `<td>${fmtPct(lo)}–${fmtPct(hi)}</td></tr>`;
+  }
+  return t + `</tbody></table></details>`;
+}
+
+function columns(el, labels, counts) {
+  const W = 560, H = 220, left = 48, bottom = 34, top = 10;
+  const maxV = Math.max(1, ...counts) * 1.1, bw = (W - left - 10) / labels.length;
+  const y = v => top + (H - top - bottom) * (1 - v / maxV);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Length of stay distribution">`;
+  const step = Math.pow(10, Math.floor(Math.log10(maxV))) / (maxV / Math.pow(10, Math.floor(Math.log10(maxV))) < 3 ? 2 : 1);
+  for (let t = 0; t <= maxV; t += step) {
+    s += `<line x1="${left}" x2="${W}" y1="${y(t)}" y2="${y(t)}" stroke="${css("--grid")}"/>`;
+    s += `<text x="${left - 6}" y="${y(t) + 4}" text-anchor="end" class="muted">${fmtInt(Math.round(t))}</text>`;
+  }
+  const total = counts.reduce((a, b) => a + b, 0);
+  labels.forEach((lab, i) => {
+    const x0 = left + i * bw;
+    s += `<g class="hit" data-i="${i}"><rect x="${x0}" y="${top}" width="${bw}" height="${H - top - bottom}" fill="transparent"/>`;
+    s += `<rect x="${x0 + 2}" y="${y(counts[i])}" width="${bw - 4}" height="${H - bottom - y(counts[i])}" rx="3" fill="${css("--series-1")}"/></g>`;
+    s += `<text x="${x0 + bw / 2}" y="${H - bottom + 14}" text-anchor="middle" class="muted">${lab}</text>`;
+  });
+  s += `<text x="${(W + left) / 2}" y="${H - 2}" text-anchor="middle">Days in hospital</text></svg>`;
+  el.innerHTML = s;
+  el.querySelectorAll(".hit").forEach(g => {
+    const i = +g.dataset.i;
+    g.addEventListener("mousemove", ev => showTip(ev, `<strong>${labels[i]} day(s)</strong><br>${fmtInt(counts[i])} patients (${fmtPct(counts[i] / Math.max(1, total))})`));
+    g.addEventListener("mouseleave", hideTip);
+  });
+}
+
+function kpis(idx) {
+  const n = idx.length;
+  let k = 0, los = 0, a1c = 0, prior = 0, meds = 0;
+  for (const i of idx) { k += D.y[i]; los += D.los[i]; a1c += D.a1c_measured[i]; prior += D.prior_ip[i] > 0 ? 1 : 0; meds += D.meds[i]; }
+  const [lo, hi] = wilson(k, n);
+  const small = n < MIN_N;
+  const cards = [
+    ["Patients in selection", fmtInt(n), `${fmtPct(n / N)} of cohort`],
+    ["30-day readmission rate", small ? "—" : fmtPct(k / n), small ? `suppressed (n < ${MIN_N})` : `95% CI ${fmtPct(lo)}–${fmtPct(hi)}`],
+    ["Readmissions within 30 days", small ? "—" : fmtInt(k), "count of patients"],
+    ["Mean length of stay", n ? (los / n).toFixed(2) + " d" : "—", `${fmtInt(los)} bed-days in total`],
+    ["HbA1c tested during stay", n ? fmtPct(a1c / n) : "—", "share of patients"],
+    ["Any prior-year inpatient stay", n ? fmtPct(prior / n) : "—", `mean ${(n ? meds / n : 0).toFixed(1)} medications`],
+  ];
+  document.getElementById("kpis").innerHTML = cards.map(([l, v, s]) =>
+    `<div class="kpi"><div class="label">${l}</div><div class="value">${v}</div><div class="sub">${s}</div></div>`).join("");
+  return n >= MIN_N ? k / n : null;
+}
+
+function sortDesc(rows) { return rows.slice().sort((a, b) => (b.n >= MIN_N) - (a.n >= MIN_N) || b.k / b.n - a.k / a.n); }
+
+function render() {
+  hideTip();
+  const idx = selectedIdx();
+  const overall = kpis(idx);
+  hbar(document.getElementById("c_discharge"), sortDesc(groupRates(idx, "discharge", D.levels.discharge)), overall, { left: 210, aria: "Readmission by discharge destination" });
+  hbar(document.getElementById("c_diag"), sortDesc(groupRates(idx, "diag", D.levels.diag)), overall, { left: 130, aria: "Readmission by primary diagnosis" });
+  hbar(document.getElementById("c_prior"), groupRates(idx, "prior_ip", D.levels.prior_ip), overall, { left: 130, aria: "Readmission by prior admissions" });
+  hbar(document.getElementById("c_age"), groupRates(idx, "age_band", D.levels.age_band), overall, { left: 90, aria: "Readmission by age band" });
+  hbar(document.getElementById("c_a1c"), groupRates(idx, "a1c", D.levels.a1c), overall, { left: 130, aria: "Readmission by HbA1c" });
+  const counts = new Array(14).fill(0);
+  for (const i of idx) counts[D.los[i] - 1]++;
+  columns(document.getElementById("c_los"), Array.from({ length: 14 }, (_, i) => String(i + 1)), counts);
+  hbar(document.getElementById("c_model"), D.model_deciles.map(d => ({ label: `Decile ${d.decile}${d.decile === 1 ? " (highest risk)" : ""}`, n: d.n, k: d.k })),
+       D.model_prevalence, { left: 150, aria: "Observed readmission by model risk decile" });
+}
+render();
+</script>
+</body>
+</html>

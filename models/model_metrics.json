@@ -1,0 +1,88 @@
+{
+  "selected_model": "Random forest",
+  "selection_note": "Random forest had the highest validation ROC-AUC",
+  "split": {
+    "train": 41982,
+    "validation": 13994,
+    "test": 13994,
+    "train_rate": 0.08972893144681054,
+    "validation_rate": 0.08968129198227812,
+    "test_rate": 0.08968129198227812
+  },
+  "threshold_top20": 0.11723629847360986,
+  "threshold_max_f1": 0.10364597471613367,
+  "test_roc_auc": 0.6485854368850057,
+  "test_roc_auc_ci": [
+    0.6335646212562902,
+    0.6644793532999411
+  ],
+  "test_pr_auc": 0.17433223148623503,
+  "test_pr_auc_ci": [
+    0.15867244214782641,
+    0.193699124923722
+  ],
+  "test_brier": 0.07927647995505165,
+  "calibration": {
+    "calibration_slope": 1.2627220084116648,
+    "calibration_in_the_large": -0.0020322156239160295,
+    "mean_predicted": 0.08984442384966497,
+    "observed_rate": 0.08968129198227812
+  },
+  "test_metrics_top20": {
+    "threshold": 0.11723629847360986,
+    "flagged_share": 0.19472631127626125,
+    "accuracy": 0.7816206945833929,
+    "precision_ppv": 0.16954128440366972,
+    "recall_sensitivity": 0.36812749003984063,
+    "specificity": 0.8223565428997567,
+    "npv": 0.9296299582926613,
+    "f1": 0.2321608040201005,
+    "tp": 462,
+    "fp": 2263,
+    "tn": 10476,
+    "fn": 793
+  },
+  "excluded_features": {
+    "encounter_id, patient_nbr": "Identifiers - no predictive meaning; risk of memorisation",
+    "readmitted, readmit_any": "Outcome information (target leakage)",
+    "encounter_seq, is_index_encounter, expired_or_hospice": "Constant within the analysis cohort",
+    "race": "Excluded as a predictor to avoid encoding structural inequities; used only for fairness audit",
+    "payer_code": "Socio-economic proxy with 40% missing; excluded for fairness and data-quality reasons",
+    "diag_1/2/3 raw ICD-9 codes": "700+ sparse levels; replaced by clinical groups",
+    "raw ID columns (admission/discharge/source)": "Replaced by grouped labels"
+  },
+  "features_numeric": [
+    "age_mid",
+    "time_in_hospital",
+    "num_lab_procedures",
+    "num_procedures",
+    "num_medications",
+    "number_outpatient",
+    "number_emergency",
+    "number_inpatient",
+    "number_diagnoses",
+    "n_diabetes_meds",
+    "n_med_dose_changes"
+  ],
+  "features_categorical": [
+    "gender",
+    "admission_type_grp",
+    "admission_source_grp",
+    "discharge_group",
+    "diag_1_group",
+    "diag_2_group",
+    "diag_3_group",
+    "A1C_result",
+    "glucose_serum",
+    "insulin",
+    "metformin",
+    "change",
+    "diabetesMed",
+    "medical_specialty_grp"
+  ],
+  "sklearn_version": "1.9.1",
+  "top_decile_capture": 0.23904382470119523,
+  "top2_decile_capture": 0.3713147410358566,
+  "top_decile_rate": 0.21428571428571427,
+  "bottom_decile_rate": 0.04071428571428572
+}

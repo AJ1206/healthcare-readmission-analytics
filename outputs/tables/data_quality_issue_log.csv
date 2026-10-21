@@ -1,0 +1,15 @@
+issue_id,quality_dimension,description,magnitude,resolution,residual_risk
+DQ-01,Validity,Gender recorded as 'Unknown/Invalid',3 rows,Rows removed,Negligible
+DQ-02,Completeness,Weight almost entirely missing,96.9% of rows,Column dropped,Body weight/BMI cannot be analysed as a risk factor
+DQ-03,Relevance,"Constant medication columns ['examide', 'citoglipton']",2 columns,Columns dropped,None
+DQ-04,Completeness,Missing payer_code,39.6% of rows,Explicit 'Unknown' category,Analyses by this field are limited to recorded values; bias if missingness is non-random
+DQ-05,Completeness,Missing medical_specialty,49.1% of rows,Explicit 'Unknown' category,Analyses by this field are limited to recorded values; bias if missingness is non-random
+DQ-06,Completeness,Missing race,2.2% of rows,Explicit 'Unknown' category,Analyses by this field are limited to recorded values; bias if missingness is non-random
+DQ-07,Completeness,Uninformative admission_type_id codes,10.2% of rows,Recoded as 'Unknown',Some loss of detail
+DQ-08,Completeness,Uninformative discharge_disposition_id codes,4.6% of rows,Recoded as 'Unknown',Some loss of detail
+DQ-09,Completeness,Uninformative admission_source_id codes,6.9% of rows,Recoded as 'Unknown',Some loss of detail
+DQ-10,Completeness,Missing secondary/tertiary diagnoses,"diag_1 21, diag_2 358, diag_3 1423 rows",Kept as 'Missing' group,Fewer recorded comorbidities may reflect coding depth rather than health
+DQ-11,Uniqueness,Repeated encounters for the same patient,"30,248 non-index encounters",Analysis cohort keeps first encounter per patient,Later-encounter risk not modelled; encounter_id ordering assumed chronological (not documented)
+DQ-12,Timeliness,Data cover 1999–2008 and contain no admission dates,Entire dataset,Documented; no time-trend analysis attempted,Practice patterns and coding (ICD-9 to ICD-10) have changed since; findings may not transfer
+DQ-13,Accuracy,Values cannot be checked against source medical records,Entire dataset,"Range, domain and consistency checks only",Passing automated checks does not prove clinical accuracy
+DQ-14,Validity,Readmission label scope (same hospital system vs any hospital) not documented,Target variable,Documented as a limitation,Readmissions may be under-counted

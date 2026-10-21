@@ -1,0 +1,23 @@
+,,Not readmitted <30d,Readmitted <30d
+age_mid,mean,65.205,67.829
+age_mid,median,65.0,75.0
+time_in_hospital,mean,4.222,4.797
+time_in_hospital,median,3.0,4.0
+num_lab_procedures,mean,42.675,44.915
+num_lab_procedures,median,44.0,46.0
+num_procedures,mean,1.426,1.425
+num_procedures,median,1.0,1.0
+num_medications,mean,15.571,16.626
+num_medications,median,14.0,15.0
+number_outpatient,mean,0.277,0.308
+number_outpatient,median,0.0,0.0
+number_emergency,mean,0.099,0.15
+number_emergency,median,0.0,0.0
+number_inpatient,mean,0.157,0.369
+number_inpatient,median,0.0,0.0
+number_diagnoses,mean,7.195,7.513
+number_diagnoses,median,8.0,8.0
+n_diabetes_meds,mean,1.187,1.225
+n_diabetes_meds,median,1.0,1.0
+n_med_dose_changes,mean,0.259,0.296
+n_med_dose_changes,median,0.0,0.0

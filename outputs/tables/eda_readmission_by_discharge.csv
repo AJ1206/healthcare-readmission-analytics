@@ -1,0 +1,7 @@
+discharge_group,events,n,rate,ci_low,ci_high
+Other inpatient / rehab facility,813,4229,0.1922,0.1806,0.2044
+Skilled nursing / ICF,1251,9390,0.1332,0.1265,0.1403
+Left against medical advice,39,409,0.0954,0.0705,0.1277
+Home with health service,789,8289,0.0952,0.0891,0.1017
+Other / Unknown,307,3338,0.092,0.0826,0.1022
+Home,3078,44315,0.0695,0.0671,0.0719

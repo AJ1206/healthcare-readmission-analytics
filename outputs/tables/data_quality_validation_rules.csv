@@ -1,0 +1,45 @@
+rule,type,failures,threshold,status
+"time_in_hospital within [1, 14]",Range,0,0 failures,PASS
+"num_lab_procedures within [0, 200]",Range,0,0 failures,PASS
+"num_procedures within [0, 6]",Range,0,0 failures,PASS
+"num_medications within [1, 100]",Range,0,0 failures,PASS
+"number_outpatient within [0, 100]",Range,0,0 failures,PASS
+"number_emergency within [0, 100]",Range,0,0 failures,PASS
+"number_inpatient within [0, 100]",Range,0,0 failures,PASS
+"number_diagnoses within [1, 16]",Range,0,0 failures,PASS
+"gender in ['Female', 'Male']",Domain,0,0 failures,PASS
+"readmitted in ['<30', '>30', 'NO']",Domain,0,0 failures,PASS
+"max_glu_serum in ['>200', '>300', 'None', 'Norm']",Domain,0,0 failures,PASS
+"A1Cresult in ['>7', '>8', 'None', 'Norm']",Domain,0,0 failures,PASS
+"change in ['Ch', 'No']",Domain,0,0 failures,PASS
+"diabetesMed in ['No', 'Yes']",Domain,0,0 failures,PASS
+"metformin in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"repaglinide in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"nateglinide in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"chlorpropamide in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"glimepiride in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"acetohexamide in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"glipizide in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"glyburide in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"tolbutamide in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"pioglitazone in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"rosiglitazone in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"acarbose in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"miglitol in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"troglitazone in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"tolazamide in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"insulin in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"glyburide-metformin in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"glipizide-metformin in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"glimepiride-pioglitazone in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"metformin-rosiglitazone in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+"metformin-pioglitazone in ['Down', 'No', 'Steady', 'Up']",Domain,0,0 failures,PASS
+encounter_id unique,Uniqueness/Logic,0,0 failures,PASS
+patient_nbr not null,Uniqueness/Logic,0,0 failures,PASS
+readmit_30 consistent with readmitted,Uniqueness/Logic,0,0 failures,PASS
+analysis cohort: one row per patient,Uniqueness/Logic,0,0 failures,PASS
+analysis cohort: no expired/hospice,Uniqueness/Logic,0,0 failures,PASS
+diabetesMed=No but a diabetes drug is recorded,Consistency,0,<0.5% of rows (warn),PASS
+diabetesMed=Yes but no diabetes drug recorded,Consistency,0,<0.5% of rows (warn),PASS
+change=No but a dose was adjusted (Up/Down),Consistency,0,<0.5% of rows (warn),PASS
+expired at discharge but labelled readmitted,Consistency,0,<0.5% of rows (warn),PASS

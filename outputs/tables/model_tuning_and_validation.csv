@@ -1,0 +1,6 @@
+model,cv_roc_auc_mean,cv_roc_auc_sd,best_params,val_roc_auc,val_pr_auc
+Logistic regression (L2),0.6436432897330099,0.011581786927945766,{'C': np.float64(0.03149)},0.6417203624469076,0.15465628498504613
+Random forest,0.6517606228411179,0.011506043124634931,"{'max_depth': 14, 'max_features': 'sqrt', 'min_samples_leaf': 19}",0.6486479859664881,0.16016038759774112
+Gradient boosting (HistGB),0.6473059295014872,0.010586113242868834,"{'l2_regularization': np.float64(0.51756), 'learning_rate': np.float64(0.09195), 'max_leaf_nodes': 9, 'min_samples_leaf': 153}",0.6390349740061654,0.15191382145936183
+Baseline: prevalence only,,,{},0.5,0.08968129198227812
+Baseline: prior inpatient count (1-variable LR),,,{},0.5459848337242129,0.1103458295697043

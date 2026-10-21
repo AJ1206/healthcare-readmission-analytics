@@ -1,0 +1,31 @@
+// DAX measures for the Diabetes Readmission dashboard (table: fact_encounters)
+Patients = COUNTROWS ( fact_encounters )
+Readmissions 30d = SUM ( fact_encounters[readmit_30] )
+Readmission Rate 30d = DIVIDE ( [Readmissions 30d], [Patients] )
+
+// Wilson 95% confidence interval for the readmission rate
+Readmission Rate CI Low =
+VAR n = [Patients]
+VAR p = [Readmission Rate 30d]
+VAR z = 1.96
+RETURN IF ( n > 0, DIVIDE ( p + z ^ 2 / ( 2 * n ) - z * SQRT ( p * ( 1 - p ) / n + z ^ 2 / ( 4 * n ^ 2 ) ), 1 + z ^ 2 / n ) )
+
+Readmission Rate CI High =
+VAR n = [Patients]
+VAR p = [Readmission Rate 30d]
+VAR z = 1.96
+RETURN IF ( n > 0, DIVIDE ( p + z ^ 2 / ( 2 * n ) + z * SQRT ( p * ( 1 - p ) / n + z ^ 2 / ( 4 * n ^ 2 ) ), 1 + z ^ 2 / n ) )
+
+// Small-sample suppression: hide rates for groups with fewer than 30 patients
+Readmission Rate (reportable) = IF ( [Patients] < 30, BLANK (), [Readmission Rate 30d] )
+Small Sample Flag = IF ( [Patients] < 30, "n < 30 - not reported", BLANK () )
+
+Overall Readmission Rate = CALCULATE ( [Readmission Rate 30d], ALLSELECTED ( fact_encounters ) )
+Rate Difference vs Overall (pp) = ( [Readmission Rate (reportable)] - [Overall Readmission Rate] ) * 100
+
+Bed Days = SUM ( fact_encounters[time_in_hospital] )
+Average LOS = AVERAGE ( fact_encounters[time_in_hospital] )
+HbA1c Testing Rate = DIVIDE ( SUM ( fact_encounters[A1C_measured] ), [Patients] )
+Prior Inpatient Share = DIVIDE ( SUM ( fact_encounters[any_prior_inpatient] ), [Patients] )
+Average Medications = AVERAGE ( fact_encounters[num_medications] )
+Average Lab Procedures = AVERAGE ( fact_encounters[num_lab_procedures] )

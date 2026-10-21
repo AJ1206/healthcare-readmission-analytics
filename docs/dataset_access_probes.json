@@ -1,0 +1,23 @@
+{
+  "accessed_utc": "2026-10-21T11:09:10+00:00",
+  "probes": [
+    {
+      "dataset": "CMS Hospital Readmissions Reduction Program (HRRP)",
+      "probe_url": "https://data.cms.gov/provider-data/api/1/metastore/schemas/dataset/items/9n3s-kdb3",
+      "http_status": 200,
+      "note": "title=Hospital Readmissions Reduction Program; modified=2026-01-26"
+    },
+    {
+      "dataset": "CDC Diabetes Health Indicators (BRFSS 2014, via UCI)",
+      "probe_url": "https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators",
+      "http_status": 200,
+      "note": ""
+    },
+    {
+      "dataset": "MIMIC-IV (PhysioNet, credentialed access)",
+      "probe_url": "https://physionet.org/content/mimiciv/",
+      "http_status": 200,
+      "note": ""
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+variable,level,n,pct
+age_group,60–79,33431,47.78
+age_group,40–59,19177,27.41
+age_group,80+,12862,18.38
+age_group,<40,4500,6.43
+gender,Female,37229,53.21
+gender,Male,32741,46.79
+race,Caucasian,52292,74.73
+race,AfricanAmerican,12625,18.04
+race,Unknown,1916,2.74
+race,Hispanic,1500,2.14
+race,Other,1149,1.64
+race,Asian,488,0.7
+admission_type_grp,Emergency,35464,50.68
+admission_type_grp,Elective,13784,19.7
+admission_type_grp,Urgent,12802,18.3
+admission_type_grp,Unknown,7893,11.28
+admission_type_grp,Other,27,0.04
+admission_source_grp,Emergency room,37258,53.25
+admission_source_grp,Referral,22789,32.57
+admission_source_grp,Other / Unknown,5083,7.26
+admission_source_grp,Transfer,4840,6.92
+discharge_group,Home,44315,63.33
+discharge_group,Skilled nursing / ICF,9390,13.42
+discharge_group,Home with health service,8289,11.85
+discharge_group,Other inpatient / rehab facility,4229,6.04
+discharge_group,Other / Unknown,3338,4.77
+discharge_group,Left against medical advice,409,0.58
+diag_1_group,Circulatory,21383,30.56
+diag_1_group,Other,12122,17.32
+diag_1_group,Respiratory,9486,13.56
+diag_1_group,Digestive,6487,9.27
+diag_1_group,Diabetes,5748,8.21
+diag_1_group,Injury,4692,6.71
+diag_1_group,Musculoskeletal,4064,5.81
+diag_1_group,Genitourinary,3440,4.92
+diag_1_group,Neoplasms,2538,3.63
+diag_1_group,Missing,10,0.01
+A1C_result,Not measured,57125,81.64
+A1C_result,>8,6239,8.92
+A1C_result,Norm,3741,5.35
+A1C_result,>7,2865,4.09
+glucose_serum,Not measured,66622,95.22
+glucose_serum,Norm,1700,2.43
+glucose_serum,>200,936,1.34
+glucose_serum,>300,712,1.02
+insulin,No,34255,48.96
+insulin,Steady,21617,30.89
+insulin,Down,7321,10.46
+insulin,Up,6777,9.69
+change,No,38481,55.0
+change,Ch,31489,45.0
+diabetesMed,Yes,53291,76.16
+diabetesMed,No,16679,23.84
+medical_specialty_grp,Unknown,33637,48.07
+medical_specialty_grp,InternalMedicine,10641,15.21
+medical_specialty_grp,Other,5486,7.84
+medical_specialty_grp,Family/GeneralPractice,4978,7.11
+medical_specialty_grp,Emergency/Trauma,4393,6.28
+medical_specialty_grp,Cardiology,4206,6.01
+medical_specialty_grp,Surgery-General,2205,3.15
+medical_specialty_grp,Orthopedics,1128,1.61
+medical_specialty_grp,Orthopedics-Reconstructive,1041,1.49
+medical_specialty_grp,Radiologist,821,1.17
+medical_specialty_grp,Nephrology,797,1.14
+medical_specialty_grp,Pulmonology,637,0.91
+payer_code,Unknown,30414,43.47
+payer_code,MC,19782,28.27
+payer_code,HM,3984,5.69
+payer_code,BC,3397,4.85
+payer_code,SP,3303,4.72
+payer_code,MD,2165,3.09
+payer_code,CP,1937,2.77
+payer_code,UN,1855,2.65
+payer_code,CM,1295,1.85
+payer_code,OG,647,0.92
+payer_code,PO,457,0.65
+payer_code,DM,372,0.53
+payer_code,WC,117,0.17
+payer_code,CH,113,0.16
+payer_code,OT,62,0.09
+payer_code,SI,37,0.05
+payer_code,MP,32,0.05
+payer_code,FR,1,0.0
+readmitted,NO,41471,59.27
+readmitted,>30,22222,31.76
+readmitted,<30,6277,8.97

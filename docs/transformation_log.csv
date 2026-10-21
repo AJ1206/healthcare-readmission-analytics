@@ -1,0 +1,20 @@
+step,stage,action,rationale,rows_or_cells_affected
+1,Missing values,Replaced '?' placeholder with a true missing value (NaN),'?' is the dataset's documented missing marker; NaN lets tools count and handle it,192849
+2,Validity,Removed rows with gender 'Unknown/Invalid',Invalid domain value; too few rows (n=3) to justify an extra category,3
+3,Completeness,Dropped 'weight',96.9% missing; imputation would fabricate most values,1 column
+4,Relevance,"Dropped constant columns ['examide', 'citoglipton']",Zero variance: carry no information,2 columns
+5,Missing values,Filled missing 'payer_code' with explicit 'Unknown' category,"Missingness may itself be informative (e.g., documentation practice); keeps rows and avoids guessing values",40255
+6,Missing values,Filled missing 'medical_specialty' with explicit 'Unknown' category,"Missingness may itself be informative (e.g., documentation practice); keeps rows and avoids guessing values",49947
+7,Missing values,Filled missing 'race' with explicit 'Unknown' category,"Missingness may itself be informative (e.g., documentation practice); keeps rows and avoids guessing values",2271
+8,Normalisation,Grouped medical_specialty into 10 most frequent + 'Other' + 'Unknown',73 sparse levels; rare levels give unstable estimates,7469
+9,Normalisation,Mapped admission_type_id codes to descriptive labels via IDS_mapping.csv; codes for NULL/Not Available/Not Mapped/Unknown set to 'Unknown',Human-readable categories; merges several codes that all mean 'unknown',10396
+10,Normalisation,Mapped discharge_disposition_id codes to descriptive labels via IDS_mapping.csv; codes for NULL/Not Available/Not Mapped/Unknown set to 'Unknown',Human-readable categories; merges several codes that all mean 'unknown',4680
+11,Normalisation,Mapped admission_source_id codes to descriptive labels via IDS_mapping.csv; codes for NULL/Not Available/Not Mapped/Unknown set to 'Unknown',Human-readable categories; merges several codes that all mean 'unknown',7067
+12,Feature engineering,"Created discharge_group, admission_type_grp, admission_source_grp",Clinically meaningful groupings with adequate counts per level,101763
+13,Data types,Converted 8 count columns from text to integer,Enables numeric validation and analysis,8 columns
+14,Normalisation,"Derived age_band label, numeric age_mid (band midpoint) and 4-level age_group",Ordered numeric use in models; broader groups for stable subgroup estimates,101763
+15,Feature engineering,"Grouped diag_1–diag_3 ICD-9 codes into 9 clinical categories (Strack et al., 2014 scheme)",700+ raw codes are too sparse for analysis,305289
+16,Normalisation,Relabelled lab value 'None' as 'Not measured'; added A1C_measured flag,"'None' means the test was not done, not a missing value",101763
+17,Feature engineering,"Created prior_visits_total, n_diabetes_meds, n_med_dose_changes, any_prior_inpatient",Summarise utilisation history and treatment intensity,101763
+18,Cohort definition,"Added readmit_30 (<30 days) target, expired_or_hospice flag and encounter sequence per patient (ordered by encounter_id)",Readmission is impossible after death and not a quality failure after hospice discharge; repeated encounters of one patient are not independent,101763
+19,Cohort definition,"Analysis cohort = index encounter per patient, excluding expired/hospice",Independent observations with an observable readmission outcome,69970

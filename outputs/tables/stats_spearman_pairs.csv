@@ -1,0 +1,9 @@
+var_1,var_2,spearman_rho,p_value,p_holm
+time_in_hospital,num_medications,0.4635806981985986,0.0,0.0
+time_in_hospital,num_lab_procedures,0.3470652633930629,0.0,0.0
+time_in_hospital,num_procedures,0.17932662665015284,0.0,0.0
+num_medications,num_procedures,0.3713477028837495,0.0,0.0
+number_inpatient,number_emergency,0.13680689467950038,1.9386569453299404e-289,5.815970835989821e-289
+age_mid,number_diagnoses,0.20591113700688776,0.0,0.0
+number_inpatient,readmit_30,0.08480083436764452,7.894022485438053e-112,1.5788044970876105e-111
+time_in_hospital,readmit_30,0.0598786421031637,1.3414138143088027e-56,1.3414138143088027e-56

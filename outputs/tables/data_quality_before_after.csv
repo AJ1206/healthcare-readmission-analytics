@@ -1,0 +1,16 @@
+metric,Raw (as downloaded),Cleaned (all encounters),"Analysis cohort (index, alive, non-hospice)"
+rows,101766.0,101763.0,69970.0
+columns,50.0,47.0,47.0
+unique_patients,71518.0,71515.0,69970.0
+completeness_pct_cells,95.77,97.57,97.45
+rows_fully_complete_pct,1.02,25.4,24.23
+columns_over_40pct_missing,2.0,1.0,2.0
+validity_pct_rows,99.997,100.0,100.0
+duplicate_encounter_ids,0.0,0.0,0.0
+exact_duplicate_rows,0.0,0.0,0.0
+constant_columns,2.0,0.0,1.0
+consistency_violations_total,0.0,0.0,0.0
+consistency: diabetesMed=No but a diabetes drug is recorded,0.0,0.0,0.0
+consistency: diabetesMed=Yes but no diabetes drug recorded,0.0,0.0,0.0
+consistency: change=No but a dose was adjusted (Up/Down),0.0,0.0,0.0
+consistency: expired at discharge but labelled readmitted,0.0,0.0,0.0

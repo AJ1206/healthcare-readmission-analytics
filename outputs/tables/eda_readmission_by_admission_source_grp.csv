@@ -1,0 +1,5 @@
+admission_source_grp,events,n,rate,ci_low,ci_high
+Emergency room,3446,37258,0.0925,0.0896,0.0955
+Other / Unknown,452,5083,0.0889,0.0814,0.0971
+Referral,1971,22789,0.0865,0.0829,0.0902
+Transfer,408,4840,0.0843,0.0768,0.0925
