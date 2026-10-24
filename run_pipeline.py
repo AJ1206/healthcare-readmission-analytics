@@ -13,7 +13,7 @@ from pathlib import Path
 SRC = Path(__file__).resolve().parent / "src"
 STEPS = ["01_data_acquisition.py", "02_data_quality_and_cleaning.py", "03_exploratory_data_analysis.py",
          "04_statistical_analysis.py", "05_predictive_modeling.py", "06_visualization_dashboard.py",
-         "07_build_report.py"]
+         "07_build_report.py", "08_build_weekly_reports.py"]
 
 
 def main() -> None:

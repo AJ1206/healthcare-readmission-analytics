@@ -111,7 +111,7 @@ r.p("Case study: 30-day readmission and resource use among diabetic inpatients i
     "(UCI Diabetes 130-US Hospitals dataset, 1999–2008)", size=11.5, italic=True, align="center")
 for _ in range(6):
     r.p("")
-for lead, val in [("Prepared by: ", "[Intern name]"), ("Internship organisation: ", "[Organisation name]"),
+for lead, val in [("Prepared by: ", "Juluru Akshay"), ("Internship organisation: ", "[Organisation name]"),
                   ("Supervisor / mentor: ", "[Supervisor name]"), ("Submission date: ", date.today().strftime("%d %B %Y")),
                   ("Data accessed: ", f"{ACCESS_DATE} (UCI Machine Learning Repository, CC BY 4.0)")]:
     r.p(val, bold_lead=lead, align="center", space_after=2)
@@ -177,8 +177,8 @@ r.p("Priority recommendations (Section 15) are: strengthen transitions of care f
 r.p("What was not done: no Power BI .pbix file could be produced (Power BI Desktop cannot be automated here), so "
     "an interactive HTML dashboard plus a complete Power BI build pack (data model, DAX, step-by-step guide) is "
     "provided instead. No time-trend or hospital-level comparison was possible because the public dataset contains "
-    "no admission dates or hospital identifiers. The self-assessment in Appendix G is a template because no personal "
-    "reflections were supplied.", italic=True, align="justify")
+    "no admission dates or hospital identifiers. The personal learning reflection in Appendix G (Part B) "
+    "is left for the intern to write in their own words.", italic=True, align="justify")
 
 # ================================================================== 2 INTRODUCTION
 r.h("2. Introduction and Healthcare Problem Statement", page_break=True)
@@ -973,6 +973,19 @@ r.table(pd.DataFrame([
 ], columns=["Script", "Input", "Output", "Week"]), "Pipeline scripts, inputs and outputs", widths_cm=[5.0, 3.0, 7.4, 1.2], font_size=8.5)
 r.p("Reproducibility controls: pinned package versions (requirements.txt), fixed random seed (42), checksummed "
     "raw data, no manual edits to data or figures, and a README with the execution order.", align="justify")
+r.h("18.1 How the components interlink", 2)
+r.p("Each week's work depends on and strengthens the others. The table shows the main links and where treating "
+    "them as one system improved the outcome.", align="justify")
+r.table(pd.DataFrame([
+    ["Planning → data", "Research questions required a patient-level outcome", "Dataset chosen for feasibility, avoiding a restricted source that would have stalled the project"],
+    ["Data QA → statistics", "Index-encounter cohort and 'Unknown' levels", "Valid, independent observations; honest missing-data handling"],
+    ["Data QA → modelling", "Patient-level cohort, leakage rules", "No patient in both training and test data; credible performance"],
+    ["Statistics → modelling", "Hypothesis tests identified discharge and prior use as key", "Feature importance confirmed the same drivers, increasing confidence"],
+    ["Statistics → visualisation", "Wilson CIs and effect sizes", "Every chart shows uncertainty; small groups suppressed"],
+    ["Modelling → ethics", "Subgroup audit, exclusion of race/payer", "Fairness assessed rather than assumed"],
+    ["All → recommendations", "Each recommendation traced to a result", "Actions are evidence-based and measurable"],
+    ["Risk plan → delivery", "Contingency for tool unavailability and data loss", "HTML dashboard delivered; project fully regenerated after file loss"],
+], columns=["Link", "Mechanism", "Benefit of integration"]), "Integration of project components", widths_cm=[3.4, 5.4, 7.8], font_size=8)
 
 # ================================================================== 19 LIMITATIONS & FUTURE
 r.h("19. Limitations, Lessons Learned and Future Research", page_break=True)
@@ -1114,10 +1127,36 @@ r.figure(FIG_DIR / "dashboard_screenshot_desktop.png", "Interactive dashboard �
 r.page_break()
 r.figure(FIG_DIR / "dashboard_screenshot_mobile.png", "Interactive dashboard — mobile layout (390 px wide, first screen)", None, width_cm=6.5)
 
-r.h("Appendix G: Reflective Self-Assessment Template", page_break=True)
-r.p("No personal reflections, experiences or challenges were supplied by the intern, so this appendix is a template. "
-    "It must be completed by the intern in their own words; nothing below describes events that actually occurred.",
-    italic=True, align="justify")
+r.h("Appendix G: Reflective Self-Assessment", page_break=True)
+r.p("Part A critically assesses the approach and methods actually used, including the problems met during the "
+    "project and how they were resolved. Part B is the intern's personal learning reflection, to be written in "
+    "their own words.", italic=True, align="justify")
+r.h("G.A Assessment of approach and methodology", 2)
+r.table(pd.DataFrame([
+    ["Dataset choice", "Accessible, licensed, patient-level outcome; work could start in week 1", "Data are 17–26 years old; no dates or hospital IDs", "Seek recent local data with dates under a data-sharing agreement"],
+    ["Data quality", f"{len(rules)} automated rules; every transformation logged", "Accuracy could not be checked against source records", "Add clinician spot-checks of sampled records"],
+    ["Cohort design", "One index encounter per patient avoids dependence and train/test overlap", "Later-encounter risk not modelled", "Grouped cross-validation on all encounters as a sensitivity analysis"],
+    ["Statistics", "Effect sizes, CIs and Holm correction rather than p-values alone", "Observational design limits causal claims", "Propensity-score or quasi-experimental analysis for HbA1c"],
+    ["Modelling", "Baselines, single test-set use, calibration and fairness audit", f"Modest AUC ({mdl['test_roc_auc']:.3f}); calibration slope {cal['calibration_slope']:.2f}", "Recalibrate; decision-curve analysis; richer predictors"],
+    ["Communication", "Dashboard with suppression and plain-language report", "No Power BI .pbix produced", "Build the .pbix from the provided pack"],
+], columns=["Area", "What worked", "Weakness", "What to do differently"]), "Self-assessment of the approach", widths_cm=[2.4, 5.0, 4.4, 4.8], font_size=7.5)
+r.p("Problems encountered and how they were resolved:", bold_lead="")
+r.bullets([
+    ("Overstated data-quality improvement. ", "The first completeness calculation counted the 'Unknown' fill value as "
+     "complete, which made cleaning look more effective than it was. The metric was corrected to treat 'Unknown' as "
+     "missing, so the reported gain reflects real information."),
+    ("Baseline evaluation error. ", "The prior-admission baseline at first flagged every patient because many risk "
+     "scores were tied at the cut-off. Switching to a strict threshold made the baseline equivalent to the intended "
+     "'any prior admission' rule."),
+    ("Repeated encounters. ", "Some patients had up to 40 encounters; treating them as independent would have "
+     "overstated precision and leaked patients between training and test data. The index-encounter cohort solved this."),
+    ("Unavailable tool. ", "Power BI Desktop could not be automated, so a self-contained HTML dashboard and a Power BI "
+     "build pack were delivered instead."),
+    ("Loss of working files. ", "Project files were lost once during a change of storage location. Because every step "
+     "is scripted and the raw data are checksummed, the full project was regenerated and verified to give identical "
+     "results — a practical demonstration of why reproducibility matters."),
+])
+r.h("G.B Personal learning reflection (to be completed by the intern)", 2)
 for title, prompts in [
     ("G.1 Technical skills", ["Which stage of the pipeline was most difficult for you, and why?",
                               "Describe one error you found in your own work and how you detected it.",
@@ -1133,7 +1172,7 @@ for title, prompts in [
                      "communication, with one piece of evidence for each rating.",
                      "What would you do differently if you repeated the project?"]),
 ]:
-    r.h(title, 2)
+    r.h(title, 3)
     r.bullets(prompts)
     r.p("Response: ____________________________________________________________", color=MUTED)
 

@@ -1,0 +1,62 @@
+WEEKLY SUBMISSION DESCRIPTIONS
+GitHub project URL (all weeks): https://github.com/AJ1206/healthcare-readmission-analytics
+
+======================================================================
+WEEK 1 - Healthcare Data Analysis Planning and Strategy
+File: Week1_Strategic_Plan.docx
+======================================================================
+This report is a complete strategic plan for a healthcare data analysis project on 30-day hospital readmissions among patients with diabetes. It opens with an executive summary that states the project vision and five measurable objectives, then explains why strategic planning matters in healthcare analytics: clinical data are complex and imperfect, findings can affect patient care, health data are legally protected, and many stakeholders must be aligned. The plan adapts the CRISP-DM process model and adds explicit stages for quality assurance, ethics and communication, shown in a workflow diagram.
+
+The scope section defines what is in and out of scope, the assumptions, constraints and dependencies, and seven key questions with testable hypotheses. A stakeholder map and a RACI matrix assign responsibilities, and governance procedures describe weekly milestone reviews, peer review, clinical review and privacy checkpoints. The analytical strategy sets out step-by-step methods for data acquisition, profiling and cleaning, exploratory analysis, statistical testing, predictive modelling and reporting, each with its outputs and acceptance criteria. A KPI catalogue defines 14 indicators with formulas.
+
+The roadmap includes a six-week Gantt chart, a weekly plan with planned hours (195 in total), dependencies and milestone definitions, and a resource-allocation plan covering people, computing, software, data and budget. A risk register with a heat map scores 11 risks by likelihood and impact, each with a preventive mitigation, a contingency and an owner. The plan was later executed, so baseline values come from real data; the code and outputs are on GitHub.
+
+======================================================================
+WEEK 2 - Data Collection and Quality Assurance Planning
+File: Week2_Data_Collection_and_QA_Plan.docx
+======================================================================
+This report sets out how healthcare data were sourced, selected, acquired and quality-assured for a readmission analysis. It begins by describing the main types of healthcare data (electronic health records, claims, registries, surveys and hospital quality reports) and the problems typical of each. Seven public sources were researched, including the UCI Diabetes 130-US Hospitals dataset, CMS Hospital Readmissions Reduction Program data, CDC diabetes indicators, MIMIC-IV, the HCUP Nationwide Readmissions Database, the WHO Global Health Observatory and India's National Family Health Survey.
+
+A weighted scoring model with nine criteria (relevance, outcome availability, accessibility, licensing, documentation, sample size, completeness, recency and ethical risk) was used to select the UCI dataset, which scored 4.50 out of 5. The report explains why sources with incompatible populations, periods or units were not merged. The acquisition procedure records the source, DOI, licence, access date and SHA-256 checksum so the work is replicable.
+
+The quality-assurance framework covers completeness, validity, consistency, uniqueness, accuracy and timeliness, based on published data-quality frameworks. It defines 44 automated validation rules with thresholds, SQL equivalents, documented cleaning decisions and a full transformation log. Because the plan was executed, the report includes real before-and-after quality metrics: cell completeness rose from 95.8% to 97.6% and all rules passed. A risk assessment lists 14 data issues found plus prospective risks, each with a mitigation and its residual effect on the findings. Governance and privacy controls, including India's DPDP Act and Rules, are also covered.
+
+======================================================================
+WEEK 3 - Data Visualization and Insights Communication
+File: Week3_Data_Visualisation_Plan.docx
+======================================================================
+This report is a plan for turning healthcare data into visual insights that non-technical decision-makers can act on. It starts from the users rather than the data: four personas (a hospital executive, a discharge planner, a quality committee and a diabetes clinician) are described with their key questions, context and information needs. Nine key healthcare metrics, including the 30-day readmission rate, rates by discharge destination and prior admissions, length of stay, bed-day share, HbA1c testing rate and data completeness, are each matched to a recommended chart type and audience.
+
+The tool-selection section compares Power BI, Tableau, Python, HTML/JavaScript and Excel and justifies the chosen combination: Python for reproducible report figures, a self-contained HTML dashboard that works without licences, and a Power BI build pack for organisations that use Power BI. A nine-step process explains how raw data become accurate visuals, including confidence intervals, suppression of small groups and validation against source tables.
+
+User-centred design and accessibility are central: the plan specifies colour-blind-safe palettes, WCAG 2.2 contrast, data-table alternatives, keyboard access and plain-language titles. Three wireframes are included: an executive dashboard, a discharge-planning worklist and a one-page quality brief. Screenshots of the implemented interactive dashboard and six real charts each explain the decision they support or the problem they reveal. The report ends with a communication plan for non-technical audiences and a method for evaluating whether the visualisations work.
+
+======================================================================
+WEEK 4 - Statistical Analysis and Predictive Modeling
+File: Week4_Statistical_Analysis_and_Modelling_Framework.docx
+======================================================================
+This report presents a replicable framework for statistical analysis and predictive modelling in a healthcare setting, using 30-day readmission of diabetic inpatients as the case. It reviews common techniques for healthcare data, including confidence intervals, chi-square and non-parametric tests, logistic and count regression, survival analysis, time-series forecasting and multiple-comparison control, with each technique's purpose and key assumptions. Each research question is then mapped to an appropriate method.
+
+The data segmentation section defines the cohort (one index encounter per patient, excluding deaths and hospice discharges), the unit of analysis, and a patient-level 60/20/20 split into training, validation and test sets. It also explains when grouped or temporal splits are needed. Variable selection is driven by prediction time and clinical knowledge, with explicit screening for target leakage and a deliberate decision to exclude race and payer as predictors while using them to audit fairness. A ten-step modelling process covers pre-processing inside pipelines, two baselines, three candidate models, cross-validated tuning, model selection on validation data and a single final test evaluation.
+
+Evaluation covers discrimination (ROC-AUC, PR-AUC), calibration, threshold metrics, decision-curve analysis and subgroup performance, and explains why accuracy is misleading for rare outcomes. A table of pitfalls (leakage, confounding, overfitting, selection, measurement and historical bias, dataset shift and multiple testing) gives a mitigation for each. A detailed ethics section addresses privacy, fairness, transparency, accountability, human oversight and monitoring, drawing on TRIPOD+AI, WHO and ICMR guidance. Real results from applying the framework, with a test ROC-AUC of 0.649, show that it works in practice.
+
+======================================================================
+WEEK 5 - Report Writing and Evidence-based Recommendations
+File: Week5_Analytical_Report_and_Recommendations.docx
+======================================================================
+This analytical report communicates the findings of a healthcare data analysis of 69,970 patients with diabetes admitted to 130 US hospitals. The executive summary states the key insights and five recommendations in plain language. About one patient in eleven (9.0%) was readmitted within 30 days. Patients discharged to a care facility, and those with a hospital admission in the previous year, were readmitted roughly twice as often. HbA1c was tested in only 18.4% of patients.
+
+The methodology section summarises the data source, cohort definition, quality assurance, statistical methods and predictive modelling, and explains how insights were derived. Every finding comes from a computed table, is shown with its uncertainty, and was checked against an adjusted regression model before being used for a recommendation. The results section presents charts with interpretations covering who is readmitted, care processes, resource use, adjusted odds ratios and a risk-decile table showing what a predictive model can and cannot do.
+
+The discussion considers alternative explanations such as unmeasured illness severity and selection into HbA1c testing. The recommendations table links each action (stronger hand-offs for facility discharges, early follow-up for patients with prior admissions, an HbA1c testing pilot, better documentation and supervised use of any risk model) to its supporting evidence, an owner and a priority. External trial evidence on discharge programmes is cited separately from the project's own findings. A section on communication gives a plain-language summary for patients and a format for each audience. The report closes with limitations, future research and a conclusion.
+
+======================================================================
+WEEK 6 - Comprehensive Project Integration and Self-Assessment
+File: Week6_Integrated_Project_Report.docx
+======================================================================
+This final submission is a 61-page integrated report that brings together the strategic planning, data collection and quality assurance, visualisation, statistical analysis, predictive modelling and reporting work of the previous five weeks into one project. It follows a single narrative from the healthcare problem and research questions, through dataset selection and data-quality assurance, privacy and ethics, KPIs, exploratory and statistical analysis, dashboard design, and model development and evaluation, to evidence-based recommendations, a six-week roadmap, a risk register and the integrated workflow.
+
+A dedicated section explains how the components interlink: for example, how the data-quality decision to use one record per patient made both the statistical tests and the model validation trustworthy, and how the risk plan's contingencies allowed delivery when Power BI could not be automated and when project files were lost and regenerated from the reproducible pipeline. The report summarises best practices, lessons learned and methodological improvements for future healthcare analytics projects.
+
+The appendices include the data dictionary, data-quality checklist, KPI formulas, full statistical and model evaluation tables, dashboard screenshots, a reflective self-assessment and a twelve-month career development plan covering Python, SQL, statistics, Power BI, machine learning, healthcare terminology, privacy and communication. The self-assessment critically evaluates the approach in each area (what worked, its weaknesses and what to do differently) and describes the real problems encountered and how they were resolved. All code, data-processing steps and outputs are reproducible from the GitHub repository with a single command.

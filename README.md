@@ -42,7 +42,7 @@ cost analysis are out of scope.
 
 ```
 Healthcare_Analytics_Project/
-├── run_pipeline.py                 # runs steps 01–07 in order
+├── run_pipeline.py                 # runs steps 01–08 in order
 ├── demo_predict.py                 # scores sample test-set patients with the trained model
 ├── requirements.txt
 ├── src/
@@ -54,15 +54,16 @@ Healthcare_Analytics_Project/
 │   ├── 05_predictive_modeling.py
 │   ├── 06_visualization_dashboard.py
 │   ├── 07_build_report.py
+│   ├── 08_build_weekly_reports.py  # weeks 1–6 submissions (uses report_data.py, weekly_figures.py)
 │   └── update_word_fields.ps1      # refreshes TOC/lists in Word (Windows)
 ├── data/raw/                       # untouched ZIP + CSVs + SOURCE_METADATA.json
 ├── data/processed/                 # cleaned encounters; analysis cohort (one row per patient)
 ├── docs/                           # data dictionary, transformation log, dataset access probes
-├── outputs/figures/                # 19 analysis charts + 2 dashboard screenshots (PNG, 200 dpi)
+├── outputs/figures/                # 19 charts, 7 planning diagrams/wireframes, 2 dashboard screenshots
 ├── outputs/tables/                 # all result tables (CSV/JSON)
 ├── models/                         # readmission_model.joblib, model_metrics.json
 ├── dashboard/                      # healthcare_readmission_dashboard.html + powerbi/ build pack
-└── report/Healthcare_Data_Analytics_Final_Report.docx
+└── report/                         # Healthcare_Data_Analytics_Final_Report.docx + weekly/ submissions
 ```
 
 ## Installation
@@ -91,7 +92,9 @@ All randomness uses seed 42, so results are identical between runs on the same p
 
 | Output | Location |
 |---|---|
-| Final report (60 pages, 21 figures, 42 tables) | `report/Healthcare_Data_Analytics_Final_Report.docx` |
+| Final report (61 pages, 21 figures, 44 tables) | `report/Healthcare_Data_Analytics_Final_Report.docx` |
+| Weekly internship submissions (weeks 1–6) | `report/weekly/Week1_…docx` to `Week6_…docx` |
+| Submission descriptions (200+ words each) | `docs/Weekly_Submission_Descriptions.txt` |
 | Interactive dashboard (open in any browser, works offline) | `dashboard/healthcare_readmission_dashboard.html` |
 | Power BI star schema, DAX measures, build guide | `dashboard/powerbi/` |
 | Trained model (scikit-learn pipeline + threshold) | `models/readmission_model.joblib` |
@@ -147,7 +150,7 @@ this threshold the model catches about 37% of readmissions, and about 1 in 6 fla
 
 - **Power BI `.pbix`:** Power BI Desktop cannot be automated in the build environment. A star-schema data model,
   DAX measures and a step-by-step guide are in `dashboard/powerbi/`.
-- **Self-assessment:** the report's Appendix G is a template for the intern to complete.
+- **Personal reflection:** Appendix G Part A assesses the methodology; Part B (personal learning) is for the intern to write.
 
 ## Citation
 
