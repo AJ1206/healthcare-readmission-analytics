@@ -41,8 +41,8 @@ def new_doc(week: int, title: str, subtitle: str) -> Report:
         "(UCI Diabetes 130-US Hospitals dataset, 1999–2008)", size=11, italic=True, align="center")
     for _ in range(6):
         r.p("")
-    for lead, val in [("Prepared by: ", AUTHOR), ("Internship organisation: ", "[Organisation name]"),
-                      ("Supervisor: ", "[Supervisor name]"), ("Date: ", date.today().strftime("%d %B %Y")),
+    for lead, val in [("Prepared by: ", AUTHOR), ("Internship organisation: ", ORGANISATION),
+                      ("Date: ", date.today().strftime("%d %B %Y")),
                       ("Project repository: ", REPO_URL)]:
         r.p(val, bold_lead=lead, align="center", space_after=2)
     r.page_break()

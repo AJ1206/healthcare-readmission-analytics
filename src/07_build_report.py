@@ -111,8 +111,8 @@ r.p("Case study: 30-day readmission and resource use among diabetic inpatients i
     "(UCI Diabetes 130-US Hospitals dataset, 1999–2008)", size=11.5, italic=True, align="center")
 for _ in range(6):
     r.p("")
-for lead, val in [("Prepared by: ", "Juluru Akshay"), ("Internship organisation: ", "[Organisation name]"),
-                  ("Supervisor / mentor: ", "[Supervisor name]"), ("Submission date: ", date.today().strftime("%d %B %Y")),
+for lead, val in [("Prepared by: ", "Juluru Akshay"), ("Internship organisation: ", "Yuva"),
+                  ("Submission date: ", date.today().strftime("%d %B %Y")),
                   ("Data accessed: ", f"{ACCESS_DATE} (UCI Machine Learning Repository, CC BY 4.0)")]:
     r.p(val, bold_lead=lead, align="center", space_after=2)
 r.p("")

@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import DOCS_DIR, MODEL_DIR, RAW_DIR, TABLE_DIR, load_json  # noqa: E402
 
 AUTHOR = "Juluru Akshay"
+ORGANISATION = "Yuva"
 REPO_URL = "https://github.com/AJ1206/healthcare-readmission-analytics"
 
 src = load_json(RAW_DIR / "SOURCE_METADATA.json")
