@@ -43,6 +43,7 @@ cost analysis are out of scope.
 ```
 Healthcare_Analytics_Project/
 ├── run_pipeline.py                 # runs steps 01–07 in order
+├── demo_predict.py                 # scores sample test-set patients with the trained model
 ├── requirements.txt
 ├── src/
 │   ├── common.py, viz_style.py, docx_helpers.py, dashboard_template.html
@@ -105,6 +106,19 @@ bundle = joblib.load("models/readmission_model.joblib")
 cohort = pd.read_csv("data/processed/diabetes_index_encounters.csv")
 risk = bundle["model"].predict_proba(cohort[bundle["features"]])[:, 1]
 ```
+
+### Try the model
+
+After the pipeline has run, score patients from the held-out test set (patients the model never saw in training):
+
+```bash
+python demo_predict.py        # 8 patients: 4 readmitted, 4 not
+python demo_predict.py 20     # a larger sample
+```
+
+It prints each patient's age, diagnosis, discharge destination, predicted 30-day readmission risk, whether they
+would be flagged (top 20% of risk, threshold 11.7%) and whether they were actually readmitted. Expect misses: at
+this threshold the model catches about 37% of readmissions, and about 1 in 6 flagged patients is readmitted.
 
 ## Key findings (analysis cohort: 69,970 patients, first eligible encounter each)
 
