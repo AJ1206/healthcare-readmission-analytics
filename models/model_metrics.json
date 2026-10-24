@@ -9,7 +9,7 @@
     "validation_rate": 0.08968129198227812,
     "test_rate": 0.08968129198227812
   },
-  "threshold_top20": 0.11723629847360986,
+  "threshold_top20": 0.11723629847360985,
   "threshold_max_f1": 0.10364597471613367,
   "test_roc_auc": 0.6485854368850057,
   "test_roc_auc_ci": [
@@ -23,13 +23,13 @@
   ],
   "test_brier": 0.07927647995505165,
   "calibration": {
-    "calibration_slope": 1.262722008411665,
-    "calibration_in_the_large": -0.0020322156239160416,
+    "calibration_slope": 1.2627220084116653,
+    "calibration_in_the_large": -0.002032215623916038,
     "mean_predicted": 0.08984442384966497,
     "observed_rate": 0.08968129198227812
   },
   "test_metrics_top20": {
-    "threshold": 0.11723629847360986,
+    "threshold": 0.11723629847360985,
     "flagged_share": 0.19472631127626125,
     "accuracy": 0.7816206945833929,
     "precision_ppv": 0.16954128440366972,
